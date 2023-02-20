@@ -3,7 +3,7 @@
 const axios = require('axios')
 const fs = require('fs')
 const { exec } = require('child_process')
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 const { send } = require('process')
 const kill = require('tree-kill')
@@ -23,6 +23,19 @@ const createWindow = () => {
 
   win.loadFile('index.html')
 //   win.webContents.openDevTools()
+
+    win.on('close', async e => {
+        if (!status.running) return
+        e.preventDefault()
+
+        const { response } = await dialog.showMessageBox(win, {
+            type: 'question',
+            buttons: ['Cancel', 'Quit Application'],
+            title: 'quit formfactories gateway',
+            message: 'Are you sure you want to quit? Your machines will stop communicating with formfactories.'
+        })
+        if (response) win.destroy()
+    })
 }
 
 // This method will be called when Electron has finished
@@ -43,10 +56,12 @@ app.whenReady().then(() => {
 
 app.on('before-quit', () => {
     // If the binary is running, stop it
+    console.log('before quit')
     if (status.running) {
         status.restartOnClose = true
         stopBinary()
     }
+    console.log('done, quitting')
 })
 
 // Check for updates every 5 minutes
@@ -112,10 +127,6 @@ ipcMain.on('stop', (event, value) => {
         return
     }
     stopBinary()
-})
-
-ipcMain.on('quit', (event, value) => {
-    win.close()
 })
 
 // Read settings file
