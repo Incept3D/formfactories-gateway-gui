@@ -18,17 +18,17 @@ module.exports = {
         homepage: 'http://formfactories.com'
       },
     },
-    {
-      name: '@electron-forge/maker-snap',
-      config: {
-        features: {
-          audio: true,
-          mpris: 'com.formfactories.gateway-gui',
-          webgl: true
-        },
-        summary: 'Connect network devices to your formfactories account'
-      },
-    },
+    // {
+    //   name: '@electron-forge/maker-snap',
+    //   config: {
+    //     features: {
+    //       audio: true,
+    //       mpris: 'com.formfactories.gateway-gui',
+    //       webgl: true
+    //     },
+    //     summary: 'Connect network devices to your formfactories account'
+    //   },
+    // },
     {
       name: '@electron-forge/maker-deb',
       config: {
