@@ -18,7 +18,7 @@ jobs:
     - name: publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run publish -- --arch=x64,arm64
+      run: npm run publish
 
   publish_on_mac:
     runs-on: macos-latest
@@ -46,4 +46,4 @@ jobs:
     - name: publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run publish -- --arch=x64,arm64
+      run: npm run publish
