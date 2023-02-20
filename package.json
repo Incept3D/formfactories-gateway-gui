@@ -11,6 +11,9 @@
       "category": "Utilities"
     }
   },
+  "packagerConfig": {
+    "executableName": "formfactories-gateway"
+  },
   "homepage": "https://incept3d.com",
   "description": "GUI application to connect local machines to formfactories",
   "main": "main.js",
