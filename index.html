@@ -1,0 +1,52 @@
+<!--index.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; font-src 'self' https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;">
+    <title>formfactories gateway</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="wrapper-drag"></div>
+      <div id="content">
+        <div id="logo-wrapper">
+          <img id="logo-icon" height="100" src="assets/formfactories-icon.png" alt="formfactories logo">
+          <div id="logo-text">
+            <h5>formfactories</h5>
+            <h2 id="logo">gateway</h2>
+          </div>
+        </div>
+        <br>
+        <div id="controls-wrapper">
+          <div id="controls">
+            <h6 id="api-key-label">Enter Your API Key</h6>
+            <div id="api-key-wrapper">
+              <input id="api-key" type="text" placeholder="API Key">
+            </div>
+            <div id="action-buttons">
+              <button id="stop">Stop</button>
+              <button id="start">Start</button>
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <div id="logs-wrapper">
+          <div id="status-wrapper">
+            <span id="status-icon">●</span>
+            <h6 id="status-label">initializing</h6>
+          </div>
+          <div id="logs"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
