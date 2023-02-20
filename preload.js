@@ -33,6 +33,13 @@ window.addEventListener('DOMContentLoaded', () => {
   })
 })
 
+// Prevent closing window without confirmation
+window.onbeforeunload = (e) => {
+  const result = confirm('Are you sure you want to quit? Your machines will stop communicating with formfactories.')
+  e.returnValue = result
+  if (result) ipcRenderer.send('quit')
+}
+
 function statusInfo (status) {
   if (status.installingUpdate) return { text: 'updating...', color: 'orange' }
   if (status.started && status.running) return { text: 'running', color: 'limegreen' }

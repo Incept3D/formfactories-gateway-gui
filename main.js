@@ -41,15 +41,23 @@ app.whenReady().then(() => {
   updateBinary()
 })
 
+app.on('before-quit', () => {
+    // If the binary is running, stop it
+    if (status.running) {
+        status.restartOnClose = true
+        stopBinary()
+    }
+})
+
 // Check for updates every 5 minutes
 setInterval(updateBinary, 5 * 60 * 1000)
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-// app.on('window-all-closed', () => {
-//   if (process.platform !== 'darwin') app.quit()
-// })
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
@@ -86,19 +94,16 @@ ipcMain.on('api-key', (event, apiKey) => {
 })
 
 ipcMain.on('start', (event, value) => {
-    console.log('main got starting?', status.started, status.updating)
     if (status.started) return
     if (status.updating) {
         status.launchAfterUpdate = true
         sendStatus()
         return
     }
-    console.log('manual start triggered')
     startBinary()
 })
 
 ipcMain.on('stop', (event, value) => {
-    console.log('main got stop!', status.started, status.updating)
     if (!status.started) return
     status.restartOnClose = false
     if (status.updating) {
@@ -107,6 +112,10 @@ ipcMain.on('stop', (event, value) => {
         return
     }
     stopBinary()
+})
+
+ipcMain.on('quit', (event, value) => {
+    win.close()
 })
 
 // Read settings file
