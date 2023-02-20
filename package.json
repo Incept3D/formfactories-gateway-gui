@@ -1,6 +1,6 @@
 {
   "name": "formfactories-gateway",
-  "productName": "formfactories gateway",
+  "productName": "formfactories-gateway",
   "version": "1.0.2",
   "author": {
     "name": "Marko Ritachka",
