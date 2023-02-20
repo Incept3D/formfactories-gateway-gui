@@ -11,19 +11,21 @@ require('update-electron-app')()
 
 let win
 const createWindow = () => {
-  win = new BrowserWindow({
-    width: 640,
-    height: 640,
-    titleBarStyle: 'hidden',
-    title: 'formfactories gateway',
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+    win = new BrowserWindow({
+        width: 640,
+        height: 640,
+        titleBarStyle: 'hidden',
+        title: 'formfactories gateway',
+        webPreferences: {
+        preload: path.join(__dirname, 'preload.js')
+        }
+    })
 
-  win.loadFile('index.html')
+    // Load HTML
+    win.loadFile('index.html')
 //   win.webContents.openDevTools()
 
+    // Handle window close
     win.on('close', async e => {
         if (!status.running) return
         e.preventDefault()
@@ -56,12 +58,10 @@ app.whenReady().then(() => {
 
 app.on('before-quit', () => {
     // If the binary is running, stop it
-    console.log('before quit')
     if (status.running) {
         status.restartOnClose = true
         stopBinary()
     }
-    console.log('done, quitting')
 })
 
 // Check for updates every 5 minutes
