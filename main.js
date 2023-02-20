@@ -1,4 +1,5 @@
 // main.js
+// Main Electron process
 
 const axios = require('axios')
 const fs = require('fs')
@@ -9,6 +10,7 @@ const { send } = require('process')
 const kill = require('tree-kill')
 require('update-electron-app')()
 
+// Create global window object
 let win
 const createWindow = () => {
     win = new BrowserWindow({
@@ -24,9 +26,8 @@ const createWindow = () => {
 
     // Load HTML
     win.loadFile('index.html')
-//   win.webContents.openDevTools()
 
-    // Handle window close
+    // Warn user if they try to quit the application
     win.on('close', async e => {
         if (!status.running) return
         e.preventDefault()
@@ -75,9 +76,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
+// Initialize application settings and status
 let settings = {}
 let status = {
     started: false,
@@ -104,11 +103,13 @@ function initializeSettings () {
     }
 }
 
+// Write a new API key to the settings file
 ipcMain.on('api-key', (event, apiKey) => {
     settings.apiKey = apiKey
     writeSettings()
 })
 
+// Start gateway on launch if API key is set
 ipcMain.on('start', (event, value) => {
     if (status.started) return
     if (status.updating) {
@@ -119,6 +120,7 @@ ipcMain.on('start', (event, value) => {
     startBinary()
 })
 
+// Stop running the gateway
 ipcMain.on('stop', (event, value) => {
     if (!status.started) return
     status.restartOnClose = false
@@ -148,6 +150,7 @@ function postLog (text) {
     } catch (e) {}
 }
 
+// Update webpage with status of server
 function sendStatus () {
     try {
         win.webContents.send('status', status)
@@ -171,9 +174,7 @@ function updateBinary () {
             }
         })
         .then(updated => {
-            console.log('done updating, installed?', updated, status.launchAfterUpdate)
             if (status.launchAfterUpdate || (updated && status.running)) {
-                console.log('starting binary after update')
                 status.updating = false
                 status.launchAfterUpdate = false
                 if (proc) {
