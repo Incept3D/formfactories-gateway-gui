@@ -1,5 +1,7 @@
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: './images/icon',
+  },
   rebuildConfig: {},
   makers: [
     {
@@ -12,7 +14,20 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        homepage: 'http://formfactories.com'
+      },
+    },
+    {
+      name: '@electron-forge/maker-snap',
+      config: {
+        features: {
+          audio: true,
+          mpris: 'com.formfactories.gateway-gui',
+          webgl: true
+        },
+        summary: 'Connect network devices to your formfactories account'
+      },
     },
     {
       name: '@electron-forge/maker-deb',
@@ -23,24 +38,6 @@ module.exports = {
         }
       }
     }
-    // {
-    //   name: '@electron-forge/maker-dmg',
-    //   config: {
-    //     background: './assets/dmg-background.png',
-    //     format: 'ULFO'
-    //   }
-    // },
-    // {
-    //   name: '@electron-forge/maker-snap',
-    //   config: {
-    //     features: {
-    //       audio: true,
-    //       mpris: 'com.example.mpris',
-    //       webgl: true
-    //     },
-    //     summary: 'formfactories gateway'
-    //   }
-    // }
   ],
   publishers: [
     {
