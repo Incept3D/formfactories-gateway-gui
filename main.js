@@ -14,10 +14,11 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: 640,
         height: 640,
+        icon: './assets/icon',
         titleBarStyle: 'hidden',
         title: 'formfactories gateway',
         webPreferences: {
-        preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js')
         }
     })
 
