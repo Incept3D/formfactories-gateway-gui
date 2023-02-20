@@ -12,7 +12,7 @@
     }
   },
   "packagerConfig": {
-    "executableName": "formfactories-gateway"
+    "executableName": "formfactories-gateway-gui"
   },
   "homepage": "https://incept3d.com",
   "description": "GUI application to connect local machines to formfactories",
