@@ -7,7 +7,7 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const { send } = require('process')
 const kill = require('tree-kill')
-const { autoUpdater } = require('electron-updater')
+require('update-electron-app')()
 
 let win
 const createWindow = () => {
