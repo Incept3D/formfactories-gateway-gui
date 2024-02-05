@@ -6,9 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-      with:
-        node-version: 20
-    - uses: actions/setup-node@master
+    - uses: actions/setup-node@v2
       with:
         node-version: 20
     - name: install dependencies
@@ -25,9 +23,7 @@ jobs:
     runs-on: buildjet-2vcpu-ubuntu-2204-arm
     steps:
     - uses: actions/checkout@v3
-      with:
-        node-version: 20
-    - uses: actions/setup-node@master
+    - uses: actions/setup-node@v2
       with:
         node-version: 20
     - name: install dependencies
@@ -44,9 +40,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
-      with:
-        node-version: 20
-    - uses: actions/setup-node@master
+    - uses: actions/setup-node@v2
       with:
         node-version: 20
     - name: install dependencies
@@ -63,9 +57,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
-      with:
-        node-version: 20
-    - uses: actions/setup-node@master
+    - uses: actions/setup-node@v2
       with:
         node-version: 20
     - name: install dependencies
