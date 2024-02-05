@@ -17,7 +17,7 @@ jobs:
         APPLE_ID: ${{ secrets.APPLE_ID }}
         APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      run: npm run make
+      run: npm run make -- --arch=x64,arm64
 
   build_on_mac:
     runs-on: macos-latest
@@ -51,4 +51,4 @@ jobs:
         APPLE_ID: ${{ secrets.APPLE_ID }}
         APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      run: npm run make
+      run: npm run make -- --arch=x64,arm64
