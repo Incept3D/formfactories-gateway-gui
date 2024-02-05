@@ -1,7 +1,7 @@
 {
   "name": "formfactories-gateway",
   "productName": "formfactories-gateway",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "author": {
     "name": "Marko Ritachka",
     "email": "markoritachka@incept3d.com"
