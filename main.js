@@ -210,6 +210,7 @@ function checkForBinaryUpdates () {
     // postLog('checking for updates... (' + process.arch + ', ' + process.platform + ')')
     return getGatewayBinaries()
         .then(res => {
+            console.log('got binaries', res.data)
             status.systemSupported = true
             if (res.data.version > (settings.version || 0)) {
                 // postLog('new version available')
@@ -224,6 +225,7 @@ function checkForBinaryUpdates () {
 
 // Get a gateway binary for the current platform
 function getGatewayBinaries () {
+    console.log('getting gateway binaries for', process.arch, process.platform)
     return axios.post('https://us-central1-formfactories-incept3d.cloudfunctions.net/downloadGateway', {
         arch: process.arch,
         platform: process.platform
@@ -235,7 +237,7 @@ function installGatewayBinary (binary) {
     status.installingUpdate = true
     sendStatus()
     return new Promise((resolve, reject) => {
-        postLog('download latest update (gateway v' + binary.version + ')...')
+        postLog('Downloading latest update (gateway v' + binary.version + ')...')
         const url = binary.url
 
         // Download the binary
@@ -261,6 +263,7 @@ function installGatewayBinary (binary) {
             })
             .catch(err => {
                 console.log('error downloading binary', err)
+                postLog('Error downloading update: ' + err)
                 status.installingUpdate = false
                 sendStatus()
                 reject(err)
