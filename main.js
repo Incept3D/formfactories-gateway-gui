@@ -13,12 +13,24 @@ require('update-electron-app')()
 // Create global window object
 let win
 const createWindow = () => {
+    let iconPath;
+    if (process.platform === 'darwin') {
+        // macOS path (assuming your macOS icon is named icon.icns)
+        iconPath = path.join(__dirname, 'assets', 'icon.icns')
+    } else if (process.platform === 'win32') {
+        // Windows path
+        iconPath = path.join(__dirname, 'assets', 'icon.ico')
+    } else {
+        // Linux path (assuming you have a suitable PNG icon for Linux)
+        iconPath = path.join(__dirname, 'assets', 'icon.png')
+    }
+
     win = new BrowserWindow({
         width: 640,
         height: 640,
-        icon: './assets/icon',
         titleBarStyle: 'hidden',
         title: 'formfactories gateway',
+        icon: iconPath,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }

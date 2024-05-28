@@ -1,6 +1,6 @@
 module.exports = {
   packagerConfig: {
-    icon: './build/icon',
+    icon: './assets/icon',
     osxSign: {},
   },
   rebuildConfig: {},
