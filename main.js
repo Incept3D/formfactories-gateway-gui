@@ -82,6 +82,7 @@ let status = {
     started: false,
     running: false,
     updating: false,
+    systemSupported: true,
     launchAfterUpdate: false,
     installingUpdate: false,
     restartOnClose: false,
@@ -197,6 +198,7 @@ function checkForBinaryUpdates () {
     // postLog('checking for updates... (' + process.arch + ', ' + process.platform + ')')
     return getGatewayBinaries()
         .then(res => {
+            status.systemSupported = true
             if (res.data.version > (settings.version || 0)) {
                 // postLog('new version available')
                 return res.data
@@ -204,6 +206,7 @@ function checkForBinaryUpdates () {
         })
         .catch(err => {
             console.log('no binary :(', err)
+            status.systemSupported = false
         })
 }
 
@@ -257,7 +260,13 @@ function installGatewayBinary (binary) {
 // Execute the gateway binary
 let proc
 function startBinary () {
-    // Execute the binary
+    // Execute the binary if system is supported
+
+    if (!status.systemSupported) {
+        postLog('Unable to start gateway, this system is not yet supported')
+        return
+    }
+
     postLog('starting gateway...')
     proc = exec(path.join(app.getPath('userData'), 'gateway_binary').replace(/ /g, '\\ '))
 
