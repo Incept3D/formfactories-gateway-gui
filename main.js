@@ -264,6 +264,8 @@ function startBinary () {
 
     if (!status.systemSupported) {
         postLog('Unable to start gateway, this system is not yet supported')
+        stopBinary()
+        sendStatus()
         return
     }
 
