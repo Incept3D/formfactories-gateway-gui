@@ -11,24 +11,30 @@ const kill = require('tree-kill')
 require('update-electron-app')()
 
 // Create global window object
-let win
+let win, iconPath
+let binaryName = 'gateway_binary'
+let titleBarStyle = 'hidden'
+const binaryTempName = 'gateway_binary_temp'
+
+// Create the browser window
 const createWindow = () => {
-    let iconPath;
+
+    // Set platform-specific settings
     if (process.platform === 'darwin') {
-        // macOS path (assuming your macOS icon is named icon.icns)
         iconPath = path.join(__dirname, 'assets', 'icon.icns')
     } else if (process.platform === 'win32') {
-        // Windows path
         iconPath = path.join(__dirname, 'assets', 'icon.ico')
+        binaryName += '.exe'
+        titleBarStyle = 'hiddenInset'
     } else {
-        // Linux path (assuming you have a suitable PNG icon for Linux)
         iconPath = path.join(__dirname, 'assets', 'icon.png')
     }
 
+    // Create the browser window
     win = new BrowserWindow({
         width: 640,
         height: 640,
-        titleBarStyle: 'hidden',
+        titleBarStyle,
         title: 'formfactories gateway',
         icon: iconPath,
         webPreferences: {
@@ -244,13 +250,13 @@ function installGatewayBinary (binary) {
         axios.get(url, { responseType: 'stream'})
             .then(res => {
                 // Write the binary to disk
-                res.data.pipe(fs.createWriteStream(path.join(app.getPath('userData'), 'gateway_binary_temp')))
+                res.data.pipe(fs.createWriteStream(path.join(app.getPath('userData'), binaryTempName)))
                     .on('finish', () => {
                         postLog('finished downloading update, installing...')
 
                         // Add execute permissions to the binary
-                        fs.chmodSync(path.join(app.getPath('userData'), 'gateway_binary_temp'), '755')
-                        fs.renameSync(path.join(app.getPath('userData'), 'gateway_binary_temp'), path.join(app.getPath('userData'), 'gateway_binary'))
+                        fs.chmodSync(path.join(app.getPath('userData'), binaryTempName), '755')
+                        fs.renameSync(path.join(app.getPath('userData'), binaryTempName), path.join(app.getPath('userData'), binaryName))
 
                         settings.version = binary.version
                         writeSettings()
@@ -285,7 +291,7 @@ function startBinary () {
     }
 
     postLog('starting gateway...')
-    proc = exec(path.join(app.getPath('userData'), 'gateway_binary').replace(/ /g, '\\ '))
+    proc = exec(path.join(app.getPath('userData'), binaryName).replace(/ /g, '\\ '))
 
     proc.stdout.on('data', data => {
         if (data.includes('gateway started')) {
