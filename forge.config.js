@@ -37,7 +37,7 @@ module.exports = {
           maintainer: 'Marko Ritachka',
           homepage: 'https://formfactories.com',
           productDescription: 'formfactories gateway connects local devices on your network to your formfactories account, allowing you to monitor them, send commands, and manage print queues',
-          version: '1.0.18'
+          version: '1.0.19'
         }
       }
     }
