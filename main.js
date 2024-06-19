@@ -254,18 +254,19 @@ function installGatewayBinary (binary) {
                     .on('finish', () => {
                         postLog('finished downloading update, installing...')
                         stopBinary()
+                            .then(() => {
+                                // Add execute permissions to the binary
+                                fs.chmodSync(path.join(app.getPath('userData'), binaryTempName), '755')
+                                fs.renameSync(path.join(app.getPath('userData'), binaryTempName), path.join(app.getPath('userData'), binaryName))
 
-                        // Add execute permissions to the binary
-                        fs.chmodSync(path.join(app.getPath('userData'), binaryTempName), '755')
-                        fs.renameSync(path.join(app.getPath('userData'), binaryTempName), path.join(app.getPath('userData'), binaryName))
+                                settings.version = binary.version
+                                writeSettings()
+                                status.installingUpdate = false
+                                sendStatus()
 
-                        settings.version = binary.version
-                        writeSettings()
-                        status.installingUpdate = false
-                        sendStatus()
-
-                        postLog('gateway update installed')
-                        resolve()
+                                postLog('gateway update installed')
+                                resolve()
+                            })
                     })
             })
             .catch(err => {
@@ -337,8 +338,13 @@ function startBinary () {
 
 // Quit the gateway binary
 function stopBinary () {
-    if (proc) {
-        kill(proc.pid)
-        proc = null
-    }
+    return new Promise((resolve, reject) => {
+        if (proc) {
+            kill(proc.pid, 'SIGTERM', err => {
+                if (err) reject(err)
+                else resolve()
+            })
+            proc = null
+        } else resolve()
+    })
 }
