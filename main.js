@@ -253,6 +253,7 @@ function installGatewayBinary (binary) {
                 res.data.pipe(fs.createWriteStream(path.join(app.getPath('userData'), binaryTempName)))
                     .on('finish', () => {
                         postLog('finished downloading update, installing...')
+                        stopBinary()
 
                         // Add execute permissions to the binary
                         fs.chmodSync(path.join(app.getPath('userData'), binaryTempName), '755')
