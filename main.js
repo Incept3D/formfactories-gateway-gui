@@ -193,19 +193,24 @@ function updateBinary () {
             }
         })
         .then(updated => {
+            status.updating = false
             if (status.launchAfterUpdate || (updated && status.running)) {
-                status.updating = false
                 status.launchAfterUpdate = false
                 if (proc) {
                     status.restartOnClose = true
                     stopBinary()
                 }
-                startBinary()               
+                startBinary()
             } else {
-                status.updating = false
                 status.launchAfterUpdate = false
-                sendStatus()
             }
+            sendStatus()
+        })
+        .catch(err => {
+            console.log('error updating binary', err)
+            postLog('Error updating gateway: ' + err)
+            status.updating = false
+            sendStatus()
         })
 }
   
@@ -266,6 +271,13 @@ function installGatewayBinary (binary) {
 
                                 postLog('gateway update installed')
                                 resolve()
+                            })
+                            .catch(err => {
+                                console.log('error installing binary', err)
+                                postLog('Error installing gateway: ' + err)
+                                status.installingUpdate = false
+                                sendStatus()
+                                reject(err)
                             })
                     })
             })
