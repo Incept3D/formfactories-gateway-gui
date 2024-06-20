@@ -199,9 +199,8 @@ function updateBinary () {
                 if (proc) {
                     status.restartOnClose = true
                     stopBinary()
-                } else {
-                    startBinary()
-                }               
+                }
+                startBinary()               
             } else {
                 status.updating = false
                 status.launchAfterUpdate = false
@@ -253,20 +252,17 @@ function installGatewayBinary (binary) {
                 res.data.pipe(fs.createWriteStream(path.join(app.getPath('userData'), binaryTempName)))
                     .on('finish', () => {
                         postLog('finished downloading update, installing...')
+                        if (proc) status.launchAfterUpdate = true
                         stopBinary()
                             .then(() => {
-                                postLog('finished stopping binary')
                                 // Add execute permissions to the binary
                                 fs.chmodSync(path.join(app.getPath('userData'), binaryTempName), '755')
-                                postLog('finished setting permissions')
                                 fs.renameSync(path.join(app.getPath('userData'), binaryTempName), path.join(app.getPath('userData'), binaryName))
-                                postLog('finished renaming')
 
                                 settings.version = binary.version
                                 writeSettings()
                                 status.installingUpdate = false
                                 sendStatus()
-                                postLog('gateway update installed')
 
                                 postLog('gateway update installed')
                                 resolve()
@@ -274,7 +270,7 @@ function installGatewayBinary (binary) {
                     })
             })
             .catch(err => {
-                postLog('error downloading binary', err)
+                console.log('error downloading binary', err)
                 postLog('Error downloading update: ' + err)
                 status.installingUpdate = false
                 sendStatus()
@@ -289,6 +285,7 @@ let proc
 function startBinary () {
     // Execute the binary if system is supported
 
+    if (proc) return
     if (!status.systemSupported) {
         postLog('Unable to start gateway, this system is not yet supported')
         stopBinary()
@@ -342,17 +339,13 @@ function startBinary () {
 
 // Quit the gateway binary
 function stopBinary () {
-    postLog('stopping binary...')
     return new Promise((resolve, reject) => {
-        if (!proc) postLog('no binary to stop, resolving')
         if (proc) {
-            postLog('killing binary')
             kill(proc.pid, 'SIGTERM', err => {
-                postLog('finished killing', err)
-                proc = null
                 if (err) reject(err)
                 else resolve()
             })
+            proc = null
         } else resolve()
     })
 }
