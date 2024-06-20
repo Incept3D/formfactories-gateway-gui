@@ -253,21 +253,20 @@ function installGatewayBinary (binary) {
                 res.data.pipe(fs.createWriteStream(path.join(app.getPath('userData'), binaryTempName)))
                     .on('finish', () => {
                         postLog('finished downloading update, installing...')
-                        console.log('finished downloading update, installing...')
                         stopBinary()
                             .then(() => {
-                                console.log('finished stopping binary')
+                                postLog('finished stopping binary')
                                 // Add execute permissions to the binary
                                 fs.chmodSync(path.join(app.getPath('userData'), binaryTempName), '755')
-                                console.log('finished setting permissions')
+                                postLog('finished setting permissions')
                                 fs.renameSync(path.join(app.getPath('userData'), binaryTempName), path.join(app.getPath('userData'), binaryName))
-                                console.log('finished renaming')
+                                postLog('finished renaming')
 
                                 settings.version = binary.version
                                 writeSettings()
                                 status.installingUpdate = false
                                 sendStatus()
-                                console.log('gateway update installed')
+                                postLog('gateway update installed')
 
                                 postLog('gateway update installed')
                                 resolve()
@@ -275,7 +274,7 @@ function installGatewayBinary (binary) {
                     })
             })
             .catch(err => {
-                console.log('error downloading binary', err)
+                postLog('error downloading binary', err)
                 postLog('Error downloading update: ' + err)
                 status.installingUpdate = false
                 sendStatus()
@@ -343,13 +342,13 @@ function startBinary () {
 
 // Quit the gateway binary
 function stopBinary () {
-    console.log('stopping binary...')
+    postLog('stopping binary...')
     return new Promise((resolve, reject) => {
-        if (!proc) console.log('no binary to stop, resolving')
+        if (!proc) postLog('no binary to stop, resolving')
         if (proc) {
-            console.log('killing binary')
+            postLog('killing binary')
             kill(proc.pid, 'SIGTERM', err => {
-                console.log('finished killing', err)
+                postLog('finished killing', err)
                 proc = null
                 if (err) reject(err)
                 else resolve()
